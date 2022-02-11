@@ -9,6 +9,8 @@ public class LeftPanel : MonoBehaviour
 {
     public Animation panelAnimation;
     public Animation modePanelAnimation;
+    public Toggle arrowToggle;
+    public Toggle linesToggle;
     public Button button;
     public Button startButton;
     public Button recordsButton;
@@ -28,7 +30,6 @@ public class LeftPanel : MonoBehaviour
     {
         button.onClick.AddListener( SwitchPanel );
         startButton.onClick.AddListener( SwitchModePanel );
-        exitButton.onClick.AddListener( ClosePanel );
     }
 
     private void OnDisable()
@@ -40,9 +41,15 @@ public class LeftPanel : MonoBehaviour
     private void SwitchPanel()
     {
         if ( isPanelActive )
+        {
+            linesToggle.isOn = true;
             panelAnimation.Play( ANIMATION.CLOSE_LEFT_PANEL );
+        }
         else
+        {
+            arrowToggle.isOn = true;
             panelAnimation.Play( ANIMATION.OPEN_LEFT_PANEL );
+        }
 
         isPanelActive = !isPanelActive;
     }
