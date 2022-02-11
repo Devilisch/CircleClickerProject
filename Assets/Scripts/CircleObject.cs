@@ -10,6 +10,7 @@ using Enums;
 
 public class CircleObject : MonoBehaviour
 {
+    public RectTransform rectTransform;
     public Button button;
     public Image outlineImage;
     public Image timerImage;
@@ -22,14 +23,16 @@ public class CircleObject : MonoBehaviour
     private float _duration = 3.0f;
     private float _speed = 1.0f;
     private float _time = 0.0f;
+    private Action<CircleStage> _destroyAction;
 
 
 
-    public void Initiate( CircleStage startStage = CircleStage.E, float speed = 1.0f, float duration = 3.0f )
+    public void Initiate( Action<CircleStage> destroyAction, CircleStage startStage = CircleStage.E, float speed = 1.0f, float duration = 3.0f )
     {
-        _startStage = startStage;
-        _speed      = speed;
-        _duration   = duration;
+        _startStage    = startStage;
+        _speed         = speed;
+        _duration      = duration;
+        _destroyAction = destroyAction;
     }
 
 
@@ -69,6 +72,7 @@ public class CircleObject : MonoBehaviour
 
     private void OnButtonClicked()
     {
+        _destroyAction( _stage );
         Destroy( gameObject );
     }
 }
