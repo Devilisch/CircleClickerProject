@@ -8,6 +8,8 @@ using Enums;
 public class ScoreObject : MonoBehaviour
 {
     public Text scoreText;
+    public GameObject pointsObject;
+    public RectTransform pointsSpawnTransform;
 
     private int _score;
 
@@ -16,16 +18,20 @@ public class ScoreObject : MonoBehaviour
         get => _score;
         private set
         {
-            _score += value;
+            _score = value;
             scoreText.text = _score.ToString();
         }
     }
 
 
 
-    public void AddPoints( CircleStage stage )
+    public void AddPoints( CircleObject circle )
     {
-        int stageDifference = CircleStage.E - stage;
-        Score = 5 + stageDifference * stageDifference * 25;
+        int difficaltyCoefficient = circle.Difficulty - CircleDifficulty.Easy;
+        int points = ( circle.Stage - CircleStage.E ) * ( 5 * difficaltyCoefficient * difficaltyCoefficient + 10 * difficaltyCoefficient + 10  );
+        Score += points;
+        PointsObject pointsObjectNew = Instantiate( pointsObject, pointsSpawnTransform, false ).GetComponent<PointsObject>();
+        pointsObjectNew.transform.localPosition = circle.transform.localPosition;
+        pointsObjectNew.Initiate( points, circle.Stage );
     }
 }

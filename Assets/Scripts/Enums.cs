@@ -1,11 +1,19 @@
 namespace Enums
 {
-    public enum CircleStage {
+    public enum CircleStage
+    {
         X = 0,
-        A = 1,
-        B = 2,
+        E = 1,
+        D = 2,
         C = 3,
-        D = 4,
-        E = 5
+        B = 4,
+        A = 5
+    }
+
+    public enum CircleDifficulty
+    {
+        Easy = 1,
+        Medium = 2,
+        Hard = 3
     }
 }

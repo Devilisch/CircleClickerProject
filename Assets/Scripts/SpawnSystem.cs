@@ -10,19 +10,25 @@ public class SpawnSystem : MonoBehaviour
     public RectTransform spawnTransform;
     public ScoreObject scoreObject;
 
-    private List<GameObject> spawnObjects = new List<GameObject>();
+    private int _maxCirclesOnScreen = 2;
+    private float _spawnCooldown = 0.2f;
+    private float _time = 0.0f;
 
 
 
     private void Update()
     {
-        if ( spawnTransform.childCount < 2 )
+        _time += Time.deltaTime;
+
+        if ( spawnTransform.childCount < _maxCirclesOnScreen && _time > _spawnCooldown )
         {
             CircleObject circle = Instantiate( circleObject, spawnTransform, false ).GetComponent<CircleObject>();
-            CircleStage stage = (CircleStage)( (int)System.Math.Ceiling( Random.Range( (float)CircleStage.B, (float)CircleStage.E ) ) );
+            CircleDifficulty difficulty = (CircleDifficulty)( (int)System.Math.Ceiling( Random.Range( 0.001f, 3.0f ) ) );
 
             circle.transform.localPosition = GetSpawnPoint( circle );
-            circle.Initiate( scoreObject.AddPoints, stage );
+            circle.Initiate( scoreObject.AddPoints, difficulty );
+
+            _time = 0.0f;
         }
     }
 
@@ -47,8 +53,7 @@ public class SpawnSystem : MonoBehaviour
     {
         bool result = true;
 
-        // including extra dot in ( 0.0f, 0.0f ) point
-        for ( int i = 0; i < spawnTransform.childCount; i++ )
+        for ( int i = 0; i < spawnTransform.childCount - 1; i++ )
         {
             CircleObject circle0 = spawnTransform.GetChild( i ).GetComponent<CircleObject>();
             float distance = ( circle0.transform.localPosition - spawnPoint ).magnitude;

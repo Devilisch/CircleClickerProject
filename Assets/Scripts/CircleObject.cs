@@ -18,21 +18,26 @@ public class CircleObject : MonoBehaviour
     public TextMeshProUGUI timerText;
 
     private CircleStage _stage = CircleStage.X;
-    private CircleStage _startStage = CircleStage.E;
-    private List<Color> _stageColor = new List<Color>{ COLOR.BLACK, COLOR.RED, COLOR.ORANGE, COLOR.YELLOW, COLOR.LIGHT_GREEN, COLOR.DARK_GREEN };
-    private float _duration = 3.0f;
+    private CircleStage _startStage = CircleStage.A;
+    private CircleDifficulty _difficulty = CircleDifficulty.Easy;
+    private float _duration = 1.5f;
     private float _speed = 1.0f;
     private float _time = 0.0f;
-    private Action<CircleStage> _destroyAction;
+    private Action<CircleObject> _destroyAction;
+
+    public CircleStage Stage { get => _stage; }
+    public CircleDifficulty Difficulty { get => _difficulty; }
 
 
 
-    public void Initiate( Action<CircleStage> destroyAction, CircleStage startStage = CircleStage.E, float speed = 1.0f, float duration = 3.0f )
+    public void Initiate( Action<CircleObject> destroyAction, CircleDifficulty difficulty = CircleDifficulty.Easy )
     {
-        _startStage    = startStage;
-        _speed         = speed;
-        _duration      = duration;
+        // _startStage    = startStage;
+        _speed         = 1.0f + ( (float)difficulty - 1.0f ) * 0.5f;
         _destroyAction = destroyAction;
+        _difficulty    = difficulty;
+
+        rectTransform.sizeDelta = rectTransform.sizeDelta * (float)difficulty;
     }
 
 
@@ -66,13 +71,13 @@ public class CircleObject : MonoBehaviour
     {
         _stage             = stage;
         timerText.text     = stage.ToString();
-        outlineImage.color = _stageColor[ (int)stage ];
-        centreImage.color  = _stageColor[ (int)stage ];
+        outlineImage.color = CIRCLE.STAGE_COLOR[ (int)stage ];
+        centreImage.color  = CIRCLE.STAGE_COLOR[ (int)stage ];
     }
 
     private void OnButtonClicked()
     {
-        _destroyAction( _stage );
+        _destroyAction( this );
         Destroy( gameObject );
     }
 }

@@ -1,3 +1,4 @@
+using System.Collections.Generic;
 using UnityEngine;
 
 namespace Constants
@@ -18,5 +19,10 @@ namespace Constants
         static public Color ORANGE = new Color( 0.8f, 0.5f, 0.0f, 1.0f );
         static public Color RED = new Color( 0.8f, 0.0f, 0.0f, 1.0f );
         static public Color BLACK = new Color( 0.0f, 0.0f, 0.0f, 1.0f );
+    }
+
+    static public class CIRCLE
+    {
+        static public List<Color> STAGE_COLOR = new List<Color>{ COLOR.BLACK, COLOR.RED, COLOR.ORANGE, COLOR.YELLOW, COLOR.LIGHT_GREEN, COLOR.DARK_GREEN };
     }
 }
