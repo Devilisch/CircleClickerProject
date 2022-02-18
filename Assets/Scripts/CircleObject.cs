@@ -11,11 +11,12 @@ using Enums;
 public class CircleObject : MonoBehaviour
 {
     public RectTransform rectTransform;
-    public Button button;
-    public Image outlineImage;
-    public Image timerImage;
-    public Image centreImage;
-    public TextMeshProUGUI timerText;
+
+    [SerializeField] private Button button;
+    [SerializeField] private Image outlineImage;
+    [SerializeField] private Image timerImage;
+    [SerializeField] private Image centreImage;
+    [SerializeField] private TextMeshProUGUI timerText;
 
     private CircleStage _stage = CircleStage.X;
     private CircleStage _startStage = CircleStage.A;
@@ -30,10 +31,10 @@ public class CircleObject : MonoBehaviour
 
 
 
-    public void Initiate( Action<CircleObject> destroyAction, CircleDifficulty difficulty = CircleDifficulty.Easy )
+    public void Initiate( Action<CircleObject> destroyAction, CircleDifficulty difficulty = CircleDifficulty.Easy, float speedRatio = 1.0f )
     {
         // _startStage    = startStage;
-        _speed         = 1.0f + ( (float)difficulty - 1.0f ) * 0.5f;
+        _speed         = ( 1.0f + ( (float)difficulty - 1.0f ) * 0.5f ) * speedRatio;
         _destroyAction = destroyAction;
         _difficulty    = difficulty;
 

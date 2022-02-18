@@ -7,19 +7,19 @@ using Constants;
 
 public class LeftPanel : MonoBehaviour
 {
-    public Animation panelAnimation;
-    public Animation modePanelAnimation;
-    public Toggle arrowToggle;
-    public Toggle linesToggle;
-    public Button button;
-    public Button startButton;
-    public Button recordsButton;
-    public Button shopButton;
-    public Button exitButton;
-    public Button warmUpModeButton;
-    public Button survivalModeButton;
-    public Button speedrunModeButton;
-    public Button countdownModeButton;
+    [SerializeField] private Animation panelAnimation;
+    [SerializeField] private Animation modePanelAnimation;
+    [SerializeField] private Toggle arrowToggle;
+    [SerializeField] private Toggle linesToggle;
+    [SerializeField] private Button button;
+    [SerializeField] private Button startButton;
+    [SerializeField] private Button recordsButton;
+    [SerializeField] private Button shopButton;
+    [SerializeField] private Button exitButton;
+    [SerializeField] private Button warmUpModeButton;
+    [SerializeField] private Button survivalModeButton;
+    [SerializeField] private Button speedrunModeButton;
+    [SerializeField] private Button countdownModeButton;
 
     private bool isPanelActive = false;
     private bool isModePanelActive = false;
@@ -28,17 +28,21 @@ public class LeftPanel : MonoBehaviour
 
     private void OnEnable()
     {
-        button.onClick.AddListener( SwitchPanel );
-        startButton.onClick.AddListener( SwitchModePanel );
+        button.onClick.AddListener( OnButtonClicked );
+        startButton.onClick.AddListener( OnStartButtonClicked );
+
+        // exitButton.onCLick.AddListener( OnExitButtonClicked  );
     }
 
     private void OnDisable()
     {
         button.onClick.RemoveAllListeners();
         startButton.onClick.RemoveAllListeners();
+
+        // exitButton.onCLick.RemoveAllListeners();
     }
 
-    private void SwitchPanel()
+    private void OnButtonClicked()
     {
         if ( isPanelActive )
         {
@@ -54,7 +58,7 @@ public class LeftPanel : MonoBehaviour
         isPanelActive = !isPanelActive;
     }
 
-    private void SwitchModePanel()
+    private void OnStartButtonClicked()
     {
         if ( isModePanelActive )
             modePanelAnimation.Play( ANIMATION.CLOSE_MODE_PANEL );

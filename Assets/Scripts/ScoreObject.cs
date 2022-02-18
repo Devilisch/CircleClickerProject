@@ -7,9 +7,10 @@ using Enums;
 
 public class ScoreObject : MonoBehaviour
 {
-    public Text scoreText;
-    public GameObject pointsObject;
-    public RectTransform pointsSpawnTransform;
+    [SerializeField] private Text scoreText;
+    [SerializeField] private Text scoreShadowText;
+    [SerializeField] private GameObject pointsObject;
+    [SerializeField] private RectTransform pointsSpawnTransform;
 
     private int _score;
 
@@ -20,6 +21,7 @@ public class ScoreObject : MonoBehaviour
         {
             _score = value;
             scoreText.text = _score.ToString();
+            scoreShadowText.text = _score.ToString();
         }
     }
 

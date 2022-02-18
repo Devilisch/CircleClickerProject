@@ -8,8 +8,8 @@ using Enums;
 
 public class PointsObject : MonoBehaviour
 {
-    public Text pointsText;
-    public Animation animationControl;
+    [SerializeField] private Text pointsText;
+    [SerializeField] private Animation animationControl;
 
 
 

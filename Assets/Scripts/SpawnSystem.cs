@@ -1,20 +1,109 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.UI;
 
 using Enums;
 
 public class SpawnSystem : MonoBehaviour
 {
-    public GameObject circleObject;
     public RectTransform spawnTransform;
-    public ScoreObject scoreObject;
+
+    [SerializeField] private GameObject circleObject;
+    [SerializeField] private ScoreObject scoreObject;
+    [SerializeField] private ChangeButtons populationButtons;
+    [SerializeField] private Button pauseButton;
+    [SerializeField] private ChangeButtons speedButtons;
+    [SerializeField] private GameObject pauseObject;
 
     private int _maxCirclesOnScreen = 2;
     private float _spawnCooldown = 0.2f;
     private float _time = 0.0f;
+    private float _speedRatio = 1.0f;
+    private bool _isPaused = false;
 
 
+
+    private void OnEnable()
+    {
+        pauseButton.onClick.AddListener( OnPauseButtonClicked );
+
+        populationButtons.DefaultText = "Circles x";
+        populationButtons.Value = 2;
+        populationButtons.InitiateButtons( DecreasePopulation, IncreasePopulation );
+
+        speedButtons.DefaultText = "Speed x";
+        speedButtons.Value = 1;
+        speedButtons.InitiateButtons( DecreaseSpeed, IncreaseSpeed );
+    }
+
+    private void OnDisable()
+    {
+        pauseButton.onClick.RemoveAllListeners();
+    }
+
+    private void OnPauseButtonClicked()
+    {
+        if ( _isPaused )
+            Time.timeScale = 1;
+        else
+            Time.timeScale = 0;
+
+        _isPaused = !_isPaused;
+        pauseObject.SetActive( _isPaused );
+    }
+
+    private void DecreasePopulation()
+    {
+        if ( populationButtons.Value > 1 )
+            populationButtons.Value--;
+
+        _maxCirclesOnScreen = (int)populationButtons.Value;
+    }
+
+    private void IncreasePopulation()
+    {
+        if ( populationButtons.Value < 4 )
+            populationButtons.Value++;
+
+        _maxCirclesOnScreen = (int)populationButtons.Value;
+    }
+
+    private void DecreaseSpeed()
+    {
+        // [0.1..0.5] - 0.1, [0.5..1.0] - 0.5, [1.0..1.5] - 0.1, [1.5..5.0] - 0.5
+        if ( ( speedButtons.Value > 0.11f && speedButtons.Value <= 0.5f )
+            || ( speedButtons.Value > 1.0f && speedButtons.Value <= 1.5f ) )
+        {
+            speedButtons.Value -= 0.1f;
+        }
+        else
+        if ( ( speedButtons.Value > 0.5f && speedButtons.Value <= 1.0f )
+            || ( speedButtons.Value > 1.5f && speedButtons.Value <= 5.0f ) )
+        {
+            speedButtons.Value -= 0.5f;
+        }
+
+        _speedRatio = speedButtons.Value;
+    }
+
+    private void IncreaseSpeed()
+    {
+        // [0.1..0.5] - 0.1, [0.5..1.0] - 0.5, [1.0..1.5] - 0.1, [1.5..5.0] - 0.5
+        if ( ( speedButtons.Value >= 0.1f && speedButtons.Value < 0.5f )
+            || ( speedButtons.Value >= 1.0f && speedButtons.Value < 1.5f ) )
+        {
+            speedButtons.Value += 0.1f;
+        }
+        else
+        if ( ( speedButtons.Value >= 0.5f && speedButtons.Value < 1.0f )
+            || ( speedButtons.Value >= 1.5f && speedButtons.Value < 5.0f ) )
+        {
+            speedButtons.Value += 0.5f;
+        }
+
+        _speedRatio = speedButtons.Value;
+    }
 
     private void Update()
     {
@@ -26,7 +115,7 @@ public class SpawnSystem : MonoBehaviour
             CircleDifficulty difficulty = (CircleDifficulty)( (int)System.Math.Ceiling( Random.Range( 0.001f, 3.0f ) ) );
 
             circle.transform.localPosition = GetSpawnPoint( circle );
-            circle.Initiate( scoreObject.AddPoints, difficulty );
+            circle.Initiate( scoreObject.AddPoints, difficulty, _speedRatio );
 
             _time = 0.0f;
         }
